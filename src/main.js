@@ -54,6 +54,20 @@ class Block {
     }
 
     /**
+     * Служебный метод возвращает NodeList
+     * Это просто ноды, у них нет методов из этого класса, addMod и т.п...
+     * @name   {string}
+     * @return {NodeList}
+     */
+    _elements(name) {
+        let selector = this.getFullElementClassName(name);
+        console.log(selector);
+        let nodeList = document.querySelectorAll(selector);
+
+        return nodeList;
+    }
+
+    /**
      * Получить элемент по имени
      * @name {string} имя блока
      */
@@ -63,14 +77,6 @@ class Block {
         let element = this.addElementMethodsAndProperties(name, node);
 
         return element;
-    }
-
-    /**
-     * Получить элементы блока по имени
-     * @name {string}
-     */
-    elements(name) {
-        console.log(name);
     }
 
     /**
@@ -116,7 +122,7 @@ class Block {
     }
 }
 
-class MyBlock extends Block {
+class Form extends Block {
     constructor() {
         super();
         this.blockName = "form";
@@ -138,4 +144,15 @@ class MyBlock extends Block {
     }
 }
 
-let myBlock = new MyBlock;
+class Nav extends Block {
+    constructor() {
+        super();
+        this.blockName = "nav";
+
+        let links = this._elements('link');
+        console.log(links);
+    }
+}
+
+let form = new Form;
+let nav = new Nav;
