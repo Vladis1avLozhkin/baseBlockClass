@@ -38,7 +38,16 @@ class Block {
                                this.modSeparator +
                                modName;
 
+        if (value) {
+            modFullClassName += '_' + value
+        }
+
         return modFullClassName;
+    }
+
+    getFullElementClassName(name) {
+        let className = '.' +  this.blockName + this.elementSeparator + name;
+        return className;
     }
 
     /**
@@ -137,8 +146,8 @@ class Block {
 class MyBlock extends Block {
     constructor() {
         super();
-
         this.blockName = "form";
+
         let input = this.element('input');
 
         input.addMod('name');
@@ -149,6 +158,10 @@ class MyBlock extends Block {
         console.log(input.hasMod('name_2'));
         input.toggleMod('name');
         console.log(input.hasMod('name'));
+
+
+        let btn = this.element('btn');
+        btn.addMod('mod-name', 'value');
     }
 }
 
