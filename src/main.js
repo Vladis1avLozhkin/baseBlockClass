@@ -108,36 +108,6 @@ class Block {
      * Проверка - есть ли у блока модификатор
      * @name   {string}  имя модификатора
      * @value  {string}  значение модификатора
-     */
-    toggleMod(name, value) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
-        this.classList.toggle(modFullName);
-    }
-
-    /**
-     * Проверка - есть ли у блока модификатор
-     * @name   {string}  имя модификатора
-     * @value  {string}  значение модификатора
-     */
-    toggleMod(name, value) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
-        this.classList.toggle(modFullName);
-    }
-
-    /**
-     * Проверка - есть ли у блока модификатор
-     * @name   {string}  имя модификатора
-     * @value  {string}  значение модификатора
-     */
-    toggleMod(name, value = null) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
-        this.classList.toggle(modFullName);
-    }
-
-    /**
-     * Проверка - есть ли у блока модификатор
-     * @name   {string}  имя модификатора
-     * @value  {string}  значение модификатора
      * @return {boolean}
      */
     hasMod(name, value = null) {
