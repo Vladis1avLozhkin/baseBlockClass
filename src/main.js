@@ -3,20 +3,24 @@ class Block {
         this.blockName = "";
         this.elementSeparator = "__";
         this.modSeparator = "_";
+
+        this.block = null;
     }
 
     /**
      * Добавить к ноде дополнительные свойтва и методы
-     * @name    {string} Имя элемента
-     * @element {object} DOM node object
+     * @name    {string}  Имя элемента
+     * @element {object}  DOM node object
+     * @isBlock {boolean} true для блока, чтобы имена селекторов другие чем для элементов формировались
      */
-    addElementMethodsAndProperties(name, element) {
+    addMethodsAndProperties(name, element, isBlock = false) {
         element.name = name;
         element.addMod = this.addMod;
         element.removeMod = this.removeMod;
         element.toggleMod = this.toggleMod;
         element.hasMod = this.hasMod;
         element.blockCtx = this;
+        element.isBlock = isBlock;
 
         return element;
     }
@@ -24,20 +28,24 @@ class Block {
     /**
      * Формирует полный селектор модификатора (вместе с именем блока или элемента)
      *
-     * @name    {string} Имя блока или элемента
+     * @element {node}   this конетекст элемента
      * @modName {string} Имя модификатора
      * @value   {string} значение модификатора
      * @return  {string}
      */
-    getFullModClassName(name, modName, value = null) {
-        let modFullClassName = this.blockName +
-                               this.elementSeparator +
-                               name +
-                               this.modSeparator +
-                               modName;
+    getFullModClassName(element, modName, value = null) {
+        let modFullClassName = "";
+
+        if (element.isBlock) {
+            modFullClassName += this.blockName;
+        } else {
+            modFullClassName += this.blockName + this.elementSeparator + element.name;
+        }
+
+        modFullClassName += this.modSeparator + modName;
 
         if (value) {
-            modFullClassName += '_' + value
+            modFullClassName += '_' + value;
         }
 
         return modFullClassName;
@@ -61,10 +69,24 @@ class Block {
      */
     _getElements(name) {
         let selector = this.getFullElementClassName(name);
-        console.log(selector);
         let nodeList = document.querySelectorAll(selector);
 
         return nodeList;
+    }
+
+    /**
+     * Получить ноду блока
+     * Можно вызвать один раз, а в дальшейшем получать блок через this.block
+     * TODO а что если на странице несколько блоков?
+     */
+    getBlock() {
+        if (! this.block) {
+            let node = document.querySelector(this.blockName);
+            let block = this.addMethodsAndProperties(this.blockName, node, true);
+            this.block = block;
+        }
+
+        return this.block;
     }
 
     /**
@@ -74,7 +96,7 @@ class Block {
     element(name) {
         let selector = this.getFullElementClassName(name);
         let node = document.querySelector(selector);
-        let element = this.addElementMethodsAndProperties(name, node);
+        let element = this.addMethodsAndProperties(name, node);
 
         return element;
     }
@@ -85,7 +107,7 @@ class Block {
      * @value {string} значение модификатора
      */
     addMod(name, value) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
+        let modFullName = this.blockCtx.getFullModClassName(this, name, value);
         this.classList.add(modFullName);
     }
 
@@ -95,7 +117,7 @@ class Block {
      * @value {string} значение модификатора
      */
     removeMod(name, value) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
+        let modFullName = this.blockCtx.getFullModClassName(this, name, value);
         this.classList.remove(modFullName);
     }
 
@@ -106,7 +128,7 @@ class Block {
      * @value {string} значение модификатора
      */
     toggleMod(name, value) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
+        let modFullName = this.blockCtx.getFullModClassName(this, name, value);
         this.classList.toggle(modFullName);
     }
 
@@ -117,7 +139,7 @@ class Block {
      * @return {boolean}
      */
     hasMod(name, value = null) {
-        let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
+        let modFullName = this.blockCtx.getFullModClassName(this, name, value);
         return this.classList.contains(modFullName);
     }
 
@@ -130,7 +152,7 @@ class Block {
         let elements = this._getElements(name);
 
         Array.prototype.forEach.call(elements, (elementNode, i, arr) => {
-            let element = this.addElementMethodsAndProperties(name, elementNode);
+            let element = this.addMethodsAndProperties(name, elementNode);
             callback(element, i, arr);
         });
     }
@@ -161,12 +183,19 @@ class Form extends Block {
 class Nav extends Block {
     constructor() {
         super();
+        this.modSeparator = "--";
         this.blockName = "nav";
 
         let links = this._getElements('link');
         this.eachElements('link', (link) => {
             link.addMod('state', 'active');
         });
+
+        let block = this.getBlock();
+        block.addMod('orientation', 'horizontal');
+        block.removeMod('orientation', 'horizontal');
+        block.toggleMod('orientation', 'horizontal');
+        console.info(block.hasMod('orientation', 'horizontal'));
     }
 }
 
