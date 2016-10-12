@@ -1,6 +1,10 @@
 class Block {
-    constructor() {
+    /**
+     * blockId {string} Используется если на странице несколько блоков
+     */
+    constructor(blockId = null) {
         this.blockName = "";
+        this.blockId = blockId;
         this.elementSeparator = "__";
         this.modSeparator = "_";
 
@@ -80,12 +84,22 @@ class Block {
      * TODO а что если на странице несколько блоков?
      */
     get block() {
-        console.log(this);
-        if (! this._block) {
-            let node = document.querySelector('.' + this.blockName);
-            let block = this.addMethodsAndProperties(this.blockName, node, true);
-            this._block = block;
+        if (this._block) {
+            return this._block;
         }
+
+        let node = null;
+        let block = null;
+
+        if (this.blockId) {
+            node = document.getElementById(this.blockId);
+            block = this.addMethodsAndProperties(this.blockName, node, true);
+        } else {
+            node = document.querySelector('.' + this.blockName);
+            block = this.addMethodsAndProperties(this.blockName, node, true);
+        }
+
+        this._block = block;
 
         return this._block;
     }
@@ -182,8 +196,8 @@ class Form extends Block {
 }
 
 class Nav extends Block {
-    constructor() {
-        super();
+    constructor(blockId) {
+        super(blockId);
         this.modSeparator = "--";
         this.blockName = "nav";
 
@@ -198,7 +212,13 @@ class Nav extends Block {
         block.toggleMod('orientation', 'horizontal');
         console.info(block.hasMod('orientation', 'horizontal'));
     }
+
+    testRemoveMod(name, value) {
+        this.block.removeMod(name, value);
+    }
 }
 
 let form = new Form;
-let nav = new Nav;
+let nav = new Nav('main-nav');
+let nav2 = new Nav('other-nav');
+nav2.testRemoveMod('orientation', 'horizontal');
