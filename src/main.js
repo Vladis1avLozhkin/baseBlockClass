@@ -80,8 +80,6 @@ class Block {
 
     /**
      * Получить ноду блока
-     * Можно вызвать один раз, а в дальшейшем получать блок через this.block
-     * TODO а что если на странице несколько блоков?
      */
     get block() {
         if (this._block) {
@@ -200,6 +198,8 @@ class Nav extends Block {
         super(blockId);
         this.modSeparator = "--";
         this.blockName = "nav";
+
+        let links = this._getElements('link');
 
         this.eachElements('link', (link) => {
             link.addMod('state', 'active');
