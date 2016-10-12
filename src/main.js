@@ -69,7 +69,7 @@ class Block {
      */
     _getElements(name) {
         let selector = this.getFullElementClassName(name);
-        let nodeList = document.querySelectorAll(selector);
+        let nodeList = this.block.querySelectorAll(selector);
 
         return nodeList;
     }
@@ -80,8 +80,9 @@ class Block {
      * TODO а что если на странице несколько блоков?
      */
     get block() {
+        console.log(this);
         if (! this._block) {
-            let node = document.querySelector(this.blockName);
+            let node = document.querySelector('.' + this.blockName);
             let block = this.addMethodsAndProperties(this.blockName, node, true);
             this._block = block;
         }
@@ -95,7 +96,7 @@ class Block {
      */
     element(name) {
         let selector = this.getFullElementClassName(name);
-        let node = document.querySelector(selector);
+        let node = this.block.querySelector(selector);
         let element = this.addMethodsAndProperties(name, node);
 
         return element;
