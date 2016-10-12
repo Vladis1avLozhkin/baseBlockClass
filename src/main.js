@@ -201,7 +201,6 @@ class Nav extends Block {
         this.modSeparator = "--";
         this.blockName = "nav";
 
-        let links = this._getElements('link');
         this.eachElements('link', (link) => {
             link.addMod('state', 'active');
         });
