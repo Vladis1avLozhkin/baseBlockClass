@@ -22,14 +22,12 @@ class Block {
     }
 
     /**
-     * Получить получить полный класс модификатора (вместе с именем блока или элемента)
+     * Формирует полный селектор модификатора (вместе с именем блока или элемента)
      *
      * @name    {string} Имя блока или элемента
      * @modName {string} Имя модификатора
      * @value   {string} значение модификатора
      * @return  {string}
-     *
-     * TODO реализовать добавление значения модификатора к modFullName
      */
     getFullModClassName(name, modName, value = null) {
         let modFullClassName = this.blockName +
@@ -45,6 +43,11 @@ class Block {
         return modFullClassName;
     }
 
+    /**
+     * Формирует полный селектор элемента
+     * @name {string} имя элемента
+     * @return {string}
+     */
     getFullElementClassName(name) {
         let className = '.' +  this.blockName + this.elementSeparator + name;
         return className;
@@ -55,7 +58,7 @@ class Block {
      * @name {string} имя блока
      */
     element(name) {
-        let selector = '.' +  this.blockName + this.elementSeparator + name;
+        let selector = this.getFullElementClassName(name);
         let node = document.querySelector(selector);
         let element = this.addElementMethodsAndProperties(name, node);
 
@@ -150,14 +153,14 @@ class MyBlock extends Block {
 
         let input = this.element('input');
 
-        input.addMod('name');
-        input.addMod('name_2');
-        input.removeMod('name_2');
-        console.log(input.hasMod('name_2'));
-        input.toggleMod('name_2');
-        console.log(input.hasMod('name_2'));
-        input.toggleMod('name');
-        console.log(input.hasMod('name'));
+        input.addMod('mod');
+        input.addMod('mod-2');
+        input.removeMod('mod-2');
+        console.log(input.hasMod('mod-2'));
+        input.toggleMod('mod-2');
+        console.log(input.hasMod('mod-2'));
+        input.toggleMod('mod');
+        console.log(input.hasMod('mod'));
 
 
         let btn = this.element('btn');
