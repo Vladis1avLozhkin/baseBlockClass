@@ -7,9 +7,10 @@ class Block {
 
     /**
      * Добавить к ноде дополнительные свойтва и методы
-     * @element {DOM node}
+     * @name    {string} Имя элемента
+     * @element {object} DOM node object
      */
-    addElementMethodsAndProperties(element) {
+    addElementMethodsAndProperties(name, element) {
         element.name = name;
         element.addMod = this.addMod;
         element.removeMod = this.removeMod;
@@ -47,7 +48,7 @@ class Block {
     element(name) {
         let selector = '.' +  this.blockName + this.elementSeparator + name;
         let node = document.querySelector(selector);
-        let element = this.addElementMethodsAndProperties(node);
+        let element = this.addElementMethodsAndProperties(name, node);
 
         return element;
     }
@@ -146,6 +147,8 @@ class MyBlock extends Block {
         console.log(input.hasMod('name_2'));
         input.toggleMod('name_2');
         console.log(input.hasMod('name_2'));
+        input.toggleMod('name');
+        console.log(input.hasMod('name'));
     }
 }
 
