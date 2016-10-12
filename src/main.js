@@ -59,7 +59,7 @@ class Block {
      * @name   {string}
      * @return {NodeList}
      */
-    _elements(name) {
+    _getElements(name) {
         let selector = this.getFullElementClassName(name);
         console.log(selector);
         let nodeList = document.querySelectorAll(selector);
@@ -120,6 +120,20 @@ class Block {
         let modFullName = this.blockCtx.getFullModClassName(this.name, name, value);
         return this.classList.contains(modFullName);
     }
+
+    /**
+     * Применить функцию к каждому элементу
+     * @name     {string} имя элемента
+     * @callback {func}   функция получающая элемет в качестве аргумента
+     */
+    eachElements(name, callback) {
+        let elements = this._getElements(name);
+
+        Array.prototype.forEach.call(elements, (elementNode, i, arr) => {
+            let element = this.addElementMethodsAndProperties(name, elementNode);
+            callback(element, i, arr);
+        });
+    }
 }
 
 class Form extends Block {
@@ -149,8 +163,10 @@ class Nav extends Block {
         super();
         this.blockName = "nav";
 
-        let links = this._elements('link');
-        console.log(links);
+        let links = this._getElements('link');
+        this.eachElements('link', (link) => {
+            link.addMod('state', 'active');
+        });
     }
 }
 
