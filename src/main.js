@@ -4,7 +4,7 @@ class Block {
         this.elementSeparator = "__";
         this.modSeparator = "_";
 
-        this.block = null;
+        this._block = null;
     }
 
     /**
@@ -79,14 +79,14 @@ class Block {
      * Можно вызвать один раз, а в дальшейшем получать блок через this.block
      * TODO а что если на странице несколько блоков?
      */
-    getBlock() {
-        if (! this.block) {
+    get block() {
+        if (! this._block) {
             let node = document.querySelector(this.blockName);
             let block = this.addMethodsAndProperties(this.blockName, node, true);
-            this.block = block;
+            this._block = block;
         }
 
-        return this.block;
+        return this._block;
     }
 
     /**
@@ -191,7 +191,7 @@ class Nav extends Block {
             link.addMod('state', 'active');
         });
 
-        let block = this.getBlock();
+        let block = this.block;
         block.addMod('orientation', 'horizontal');
         block.removeMod('orientation', 'horizontal');
         block.toggleMod('orientation', 'horizontal');
