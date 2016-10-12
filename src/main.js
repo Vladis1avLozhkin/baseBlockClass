@@ -1,6 +1,6 @@
 class Block {
     /**
-     * blockId {string} Используется если на странице несколько блоков
+     * @param blockId {string} Используется если на странице несколько блоков
      */
     constructor(blockId = null) {
         this.blockName = "";
@@ -13,9 +13,9 @@ class Block {
 
     /**
      * Добавить к ноде дополнительные свойтва и методы
-     * @name    {string}  Имя элемента
-     * @element {object}  DOM node object
-     * @isBlock {boolean} true для блока, чтобы имена селекторов другие чем для элементов формировались
+     * @param name    {string}  Имя элемента
+     * @param element {object}  DOM node object
+     * @param isBlock {boolean} true для блока, чтобы имена селекторов другие чем для элементов формировались
      */
     addMethodsAndProperties(name, element, isBlock = false) {
         element.name = name;
@@ -32,9 +32,9 @@ class Block {
     /**
      * Формирует полный селектор модификатора (вместе с именем блока или элемента)
      *
-     * @element {node}   this конетекст элемента
-     * @modName {string} Имя модификатора
-     * @value   {string} значение модификатора
+     * @param element {node}   this конетекст элемента
+     * @param modName {string} Имя модификатора
+     * @param value   {string} значение модификатора
      * @return  {string}
      */
     getFullModClassName(element, modName, value = null) {
@@ -57,7 +57,7 @@ class Block {
 
     /**
      * Формирует полный селектор элемента
-     * @name {string} имя элемента
+     * @param name {string} имя элемента
      * @return {string}
      */
     getFullElementClassName(name) {
@@ -68,7 +68,7 @@ class Block {
     /**
      * Служебный метод возвращает NodeList
      * Это просто ноды, у них нет методов из этого класса, addMod и т.п...
-     * @name   {string}
+     * @param name   {string}
      * @return {NodeList}
      */
     _getElements(name) {
@@ -104,7 +104,7 @@ class Block {
 
     /**
      * Получить элемент по имени
-     * @name {string} имя блока
+     * @param name {string} имя блока
      */
     element(name) {
         let selector = this.getFullElementClassName(name);
@@ -116,8 +116,8 @@ class Block {
 
     /**
      * Добавить к модификатор к блоку/элементу
-     * @name  {string} имя модификатора
-     * @value {string} значение модификатора
+     * @param name  {string} имя модификатора
+     * @param value {string} значение модификатора
      */
     addMod(name, value) {
         let modFullName = this.blockCtx.getFullModClassName(this, name, value);
@@ -126,8 +126,8 @@ class Block {
 
     /**
      * Удалить модификатор у блока/элемента
-     * @name  {string} имя модификатора
-     * @value {string} значение модификатора
+     * @param name  {string} имя модификатора
+     * @param value {string} значение модификатора
      */
     removeMod(name, value) {
         let modFullName = this.blockCtx.getFullModClassName(this, name, value);
@@ -137,8 +137,8 @@ class Block {
     /**
      * Переключатель модификатора блока.
      * Добавит мод если его нет и удалит в противном случае
-     * @name  {string} имя модификатора
-     * @value {string} значение модификатора
+     * @param param name  {string} имя модификатора
+     * @param param value {string} значение модификатора
      */
     toggleMod(name, value) {
         let modFullName = this.blockCtx.getFullModClassName(this, name, value);
@@ -147,8 +147,8 @@ class Block {
 
     /**
      * Проверка - есть ли у блока модификатор
-     * @name   {string}  имя модификатора
-     * @value  {string}  значение модификатора
+     * @param name   {string}  имя модификатора
+     * @param value  {string}  значение модификатора
      * @return {boolean}
      */
     hasMod(name, value = null) {
@@ -158,8 +158,8 @@ class Block {
 
     /**
      * Применить функцию к каждому элементу
-     * @name     {string} имя элемента
-     * @callback {func}   функция получающая элемет в качестве аргумента
+     * @param name     {string} имя элемента
+     * @param callback {func}   функция получающая элемет в качестве аргумента
      */
     eachElements(name, callback) {
         let elements = this._getElements(name);
