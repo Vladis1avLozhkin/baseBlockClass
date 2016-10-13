@@ -14,5 +14,7 @@
     "pug-loader": "^2.3.0",
     "webpack": "^1.13.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "custom-event": "^1.0.1"
+  }
 }

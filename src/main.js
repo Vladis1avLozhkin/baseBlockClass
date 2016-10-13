@@ -169,6 +169,22 @@ class Block {
             callback(element, i, arr);
         });
     }
+
+    pub(eventName, data = null) {
+        var event = new CustomEvent(eventName, {
+            bubbles: false,
+            cancelable: false,
+            detail: data
+        });
+
+        document.dispatchEvent(event);
+    }
+
+    sub(eventName, callback) {
+        document.addEventListener(eventName, (event) => {
+            callback(event.detail);
+        });
+    }
 }
 
 class Form extends Block {
@@ -176,20 +192,9 @@ class Form extends Block {
         super();
         this.blockName = "form";
 
-        let input = this.element('input');
-
-        input.addMod('mod');
-        input.addMod('mod-2');
-        input.removeMod('mod-2');
-        console.log(input.hasMod('mod-2'));
-        input.toggleMod('mod-2');
-        console.log(input.hasMod('mod-2'));
-        input.toggleMod('mod');
-        console.log(input.hasMod('mod'));
-
-
-        let btn = this.element('btn');
-        btn.addMod('mod-name', 'value');
+        this.sub('test-event', (data) => {
+            console.log(data);
+        });
     }
 }
 
@@ -199,25 +204,9 @@ class Nav extends Block {
         this.modSeparator = "--";
         this.blockName = "nav";
 
-        let links = this._getElements('link');
-
-        this.eachElements('link', (link) => {
-            link.addMod('state', 'active');
-        });
-
-        let block = this.block;
-        block.addMod('orientation', 'horizontal');
-        block.removeMod('orientation', 'horizontal');
-        block.toggleMod('orientation', 'horizontal');
-        console.info(block.hasMod('orientation', 'horizontal'));
-    }
-
-    testRemoveMod(name, value) {
-        this.block.removeMod(name, value);
+        this.pub('test-event', {choiceLink: '/news'});
     }
 }
 
 let form = new Form;
 let nav = new Nav('main-nav');
-let nav2 = new Nav('other-nav');
-nav2.testRemoveMod('orientation', 'horizontal');
