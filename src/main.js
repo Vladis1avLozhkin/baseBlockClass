@@ -1,3 +1,5 @@
+var CustomEvent = require('custom-event');
+
 class Block {
     /**
      * @param blockId {string} Используется если на странице несколько блоков
