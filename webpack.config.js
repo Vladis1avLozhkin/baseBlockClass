@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
     devtool: '#inline-source-map',
     entry: "./src/main.js",
@@ -17,12 +19,16 @@ module.exports = {
                     presets: ['es2015']
                 }
             },
+            { test: /\.pug$/, loader: "pug" }
         ]
     },
     resolve: {
       extensions: ['', '.js', '.json'],
     },
     plugins: [
+        new HtmlWebpackPlugin({  // Also generate a test.html
+            template: './src/index.pug'
+        }),
         new webpack.ProvidePlugin({
             // $: "jquery",
             // jQuery: "jquery",
