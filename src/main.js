@@ -21,6 +21,7 @@ class Block {
      */
     addMethodsAndProperties(name, element, isBlock = false) {
         element.name = name;
+        element.setMod = this.setMod;
         element.addMod = this.addMod;
         element.removeMod = this.removeMod;
         element.toggleMod = this.toggleMod;
@@ -51,7 +52,7 @@ class Block {
         modFullClassName += this.modSeparator + modName;
 
         if (value) {
-            modFullClassName += '_' + value;
+            modFullClassName += this.modSeparator + value;
         }
 
         return modFullClassName;
@@ -127,6 +128,29 @@ class Block {
     }
 
     /**
+     * Устанавливает модификтор блоку/элементу.
+     * Если у элемента уже есть мод. с тем же именем но другим значением заменяет его
+     *
+     * @param name  {string} имя модификатора
+     * @param value {string} значение модификатора
+     */
+    setMod(name, value) {
+        this.classList.forEach((classItem) => {
+            let classSplit = classItem.split(this.blockCtx.modSeparator);
+
+            let modName  = classSplit[1];
+            let modVAlue = classSplit[2];
+
+            if (modName === name) {
+                this.classList.remove(classItem);
+            }
+        });
+
+        let modFullName = this.blockCtx.getFullModClassName(this, name, value);
+        this.classList.add(modFullName);
+    }
+
+    /**
      * Удалить модификатор у блока/элемента
      * @param name  {string} имя модификатора
      * @param value {string} значение модификатора
@@ -192,23 +216,13 @@ class Block {
 class Form extends Block {
     constructor() {
         super();
+        this.modSeparator = "--";
         this.blockName = "form";
 
-        this.sub('test-event', (data) => {
-            console.log(data);
-        });
-    }
-}
-
-class Nav extends Block {
-    constructor(blockId) {
-        super(blockId);
-        this.modSeparator = "--";
-        this.blockName = "nav";
-
-        this.pub('test-event', {choiceLink: '/news'});
+        this.block.setMod('state', 'disabled');
+        this.block.setMod('state', 'active');
     }
 }
 
 let form = new Form;
-let nav = new Nav('main-nav');
+
